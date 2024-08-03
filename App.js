@@ -18,7 +18,8 @@ app.use(cors({
 }));
 
 // Connect to MongoDB
-const URI = 'mongodb+srv://designshoods:Uhlgtpf36JVm8vwI@cluster0.gtnnqqg.mongodb.net/designhood?retryWrites=true&w=majority'
+// const URI = 'mongodb+srv://designshoods:Uhlgtpf36JVm8vwI@cluster0.gtnnqqg.mongodb.net/designhood?retryWrites=true&w=majority'
+const URI = process.env.DB
 mongoose.connect(URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.log(err))
@@ -85,6 +86,7 @@ app.post('/api/uploadimage', upload.single('postimg'), async (req, resp) => {
 app.get('/api/getpost/:type', async (req, resp) => {
     const type = req.params.type
     const posts = await post.find({ type: type })
+    
     // Convert Buffer to base64 string
     const formattedPosts = posts.map(post => ({
         ...post.toObject(),
@@ -109,8 +111,8 @@ app.get('/api/getpost/:type', async (req, resp) => {
 
 
 
-
-app.listen(4000, () => {
+const PORT=process.env.PORT
+app.listen(PORT, () => {
     console.log('Server is running on port 4000')
 })
 
